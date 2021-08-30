@@ -4,20 +4,17 @@ import styled from "styled-components/native";
 
 export const Container = styled(SafeAreaView)`
   flex: 1;
-  padding-top: 18px;
   background-color: ${({ theme }) => theme.colors.background_secondary};
 `;
 
-export const Header = styled(SafeAreaView)`
+export const Header = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 18px;
-  position: absolute;
-  margin-left: 15px;
-`;
 
-export const Content = styled.ScrollView``;
+  margin-top: 10px;
+  margin-left: 10px;
+`;
 
 export const Details = styled.View`
   width: 100%;

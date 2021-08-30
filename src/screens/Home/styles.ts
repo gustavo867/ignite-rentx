@@ -1,17 +1,10 @@
 import { FlatList } from "react-native";
+import { RectButton } from "react-native-gesture-handler";
+import Animated from "react-native-reanimated";
 import { RFValue } from "react-native-responsive-fontsize";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
-
-type Car = {
-  brand: string;
-  name: string;
-  rent: {
-    price: string;
-    period: string;
-  };
-  thumbnail: string;
-};
+import { CarDTO } from "../../dtos/CarDTO";
 
 export const Container = styled.View`
   flex: 1;
@@ -36,9 +29,30 @@ export const TotalCars = styled.Text`
   color: ${({ theme }) => theme.colors.shape};
 `;
 
-export const CarList = styled(FlatList as new () => FlatList<number>).attrs({
+export const CarList = styled(FlatList as new () => FlatList<CarDTO>).attrs({
   contentContainerStyle: {
     padding: 24,
   },
   showsVerticalScrollIndicator: false,
 })``;
+
+export const LoadContainer = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const MyCarsButton = styled(RectButton)`
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+
+  align-items: center;
+  justify-content: center;
+
+  position: absolute;
+  right: 22px;
+  bottom: 13px;
+
+  background-color: ${({ theme }) => theme.colors.main};
+`;

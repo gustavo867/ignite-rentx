@@ -1,26 +1,20 @@
 import React from "react";
 
-import GasolineSvg from "../../assets/gasoline.svg";
 import * as S from "./styles";
 
-type CarData = {
-  brand: string;
-  name: string;
-  rent: {
-    price: string;
-    period: string;
-  };
-  thumbnail: string;
-};
+import { CarDTO } from "../../dtos/CarDTO";
+import { getAccessoryIcon } from "../../utils/getAccessoryIcon";
 
 type Props = {
-  data: CarData;
-  onPress: () => void;
+  data: CarDTO;
+  onPress(data: CarDTO): void;
 };
 
 export function Car({ data, onPress }: Props) {
+  const MotorIcon = getAccessoryIcon(data.fuel_type);
+
   return (
-    <S.Container onPress={onPress}>
+    <S.Container onPress={() => onPress(data)}>
       <S.Details>
         <S.Brand>{data.brand}</S.Brand>
         <S.Name>{data.name}</S.Name>
@@ -32,7 +26,7 @@ export function Car({ data, onPress }: Props) {
           </S.Rent>
 
           <S.Type>
-            <GasolineSvg />
+            <MotorIcon />
           </S.Type>
         </S.About>
       </S.Details>

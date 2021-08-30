@@ -3,6 +3,7 @@ import { Feather } from "@expo/vector-icons";
 import {
   Calendar as CustomCalendar,
   LocaleConfig,
+  DateCallbackHandler,
 } from "react-native-calendars";
 import {
   dayNames,
@@ -11,8 +12,6 @@ import {
   monthNamesShort,
 } from "./locales";
 import { useTheme } from "styled-components";
-
-interface Props {}
 
 LocaleConfig.locales["pt-Br"] = {
   monthNames: monthNames,
@@ -23,7 +22,29 @@ LocaleConfig.locales["pt-Br"] = {
 };
 LocaleConfig.defaultLocale = "pt-Br";
 
-export function Calendar({}: Props) {
+export interface MarkedDateProps {
+  [date: string]: {
+    color: string;
+    textColor: string;
+    disabled?: boolean;
+    disableTouchEvent?: boolean;
+  };
+}
+
+export interface DayProps {
+  dateString: string;
+  day: number;
+  month: number;
+  year: number;
+  timestamp: number;
+}
+
+interface CalendarProps {
+  markedDates: MarkedDateProps;
+  onDayPress: DateCallbackHandler;
+}
+
+export function Calendar({ markedDates, onDayPress }: CalendarProps) {
   const theme = useTheme();
 
   return (
@@ -54,6 +75,9 @@ export function Calendar({}: Props) {
         },
       }}
       minDate={new Date()}
+      markingType="period"
+      markedDates={markedDates}
+      onDayPress={onDayPress}
     />
   );
 }

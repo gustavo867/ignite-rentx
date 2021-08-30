@@ -6,6 +6,8 @@ import { CarDetails } from "../screens/CarDetails";
 import { Schedules } from "../screens/Schedules";
 import { SchedulingDetails } from "../screens/SchedulingDetails";
 import { SchedulingComplete } from "../screens/SchedulingComplete";
+import { MyCars } from "../screens/MyCars";
+import { Splash } from "../screens/Splash";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -16,11 +18,19 @@ export function Routes() {
         headerShown: false,
       }}
     >
-      <Screen name="Home" component={Home} />
+      <Screen name="Splash" component={Splash} />
+      <Screen
+        name="Home"
+        component={Home}
+        options={{
+          gestureEnabled: false,
+        }}
+      />
       <Screen name="CarDetails" component={CarDetails} />
       <Screen name="Schedules" component={Schedules} />
       <Screen name="SchedulingDetails" component={SchedulingDetails} />
       <Screen name="SchedulingComplete" component={SchedulingComplete} />
+      <Screen name="MyCars" component={MyCars} />
     </Navigator>
   );
 }
