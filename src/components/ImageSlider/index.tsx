@@ -1,11 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { useRef } from "react";
 import { ViewToken } from "react-native";
-import {
-  FlatList,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-} from "react-native";
+import { FlatList } from "react-native";
 
 import * as S from "./styles";
 

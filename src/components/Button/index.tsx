@@ -9,8 +9,8 @@ interface Props extends RectButtonProps {
   onPress?: () => void;
   color?: string;
   title: string;
-  enabled?: boolean;
   loading?: boolean;
+  light?: boolean;
 }
 
 export function Button({
@@ -19,6 +19,7 @@ export function Button({
   title,
   enabled = true,
   loading = false,
+  light = false,
   ...rest
 }: Props) {
   const theme = useTheme();
@@ -30,12 +31,13 @@ export function Button({
       }}
       onPress={onPress}
       color={color}
+      enabled={enabled}
       {...rest}
     >
       {loading ? (
         <Load size="small" color={theme.colors.shape} />
       ) : (
-        <S.Title>{title}</S.Title>
+        <S.Title light={light}>{title}</S.Title>
       )}
     </S.Container>
   );

@@ -13,8 +13,10 @@ import * as S from "./styles";
 
 import BrandSvg from "../../assets/brand.svg";
 import LogoSvg from "../../assets/logo.svg";
+import { useAuth } from "../../hooks/auth";
 
 export function Splash() {
+  const { user } = useAuth();
   const { navigate } = useNavigation();
 
   const splashAnimation = useSharedValue(0);
@@ -58,7 +60,11 @@ export function Splash() {
   }));
 
   function startApp() {
-    navigate("Home");
+    if (Boolean(user?.id)) {
+      navigate("App");
+    } else {
+      navigate("SignIn");
+    }
   }
 
   useEffect(() => {

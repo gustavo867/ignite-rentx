@@ -66,7 +66,7 @@ export function CarDetails() {
           </S.Header>
 
           <Animated.View style={slideCarsStyleAnimation}>
-            <ImageSlider imagesUrl={data.photos} />
+            <ImageSlider imagesUrl={data.photos.map((item) => item.photo)} />
           </Animated.View>
         </SafeAreaView>
       </Animated.View>
@@ -88,8 +88,8 @@ export function CarDetails() {
           </S.Description>
 
           <S.Rent>
-            <S.Period>{data.rent.period}</S.Period>
-            <S.Price>R$ {data.rent.price}</S.Price>
+            <S.Period>{data.period}</S.Period>
+            <S.Price>R$ {data.price}</S.Price>
           </S.Rent>
         </S.Details>
         <S.Accessories>

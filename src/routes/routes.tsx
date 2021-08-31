@@ -1,36 +1,31 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { Home } from "../screens/Home";
-import { CarDetails } from "../screens/CarDetails";
-import { Schedules } from "../screens/Schedules";
-import { SchedulingDetails } from "../screens/SchedulingDetails";
-import { SchedulingComplete } from "../screens/SchedulingComplete";
-import { MyCars } from "../screens/MyCars";
 import { Splash } from "../screens/Splash";
+
+import { useAuth } from "../hooks/auth";
+import { AuthRoutes } from "./auth.routes";
+import { AppRoutes } from "./app.routes";
 
 const { Navigator, Screen } = createStackNavigator();
 
 export function Routes() {
+  const { user } = useAuth();
+
   return (
     <Navigator
       screenOptions={{
         headerShown: false,
       }}
     >
-      <Screen name="Splash" component={Splash} />
-      <Screen
-        name="Home"
-        component={Home}
-        options={{
-          gestureEnabled: false,
-        }}
-      />
-      <Screen name="CarDetails" component={CarDetails} />
-      <Screen name="Schedules" component={Schedules} />
-      <Screen name="SchedulingDetails" component={SchedulingDetails} />
-      <Screen name="SchedulingComplete" component={SchedulingComplete} />
-      <Screen name="MyCars" component={MyCars} />
+      {Boolean(user?.id) ? (
+        <>
+          <Screen name="Splash" component={Splash} />
+          <Screen name="App" component={AppRoutes} />
+        </>
+      ) : (
+        <Screen name="Auth" component={AuthRoutes} />
+      )}
     </Navigator>
   );
 }

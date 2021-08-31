@@ -36,7 +36,7 @@ export function SchedulingDetails() {
   const { params } = useRoute();
   const { car, dates } = params as RouteProps;
   const theme = useTheme();
-  const rentTotal = Number(dates.length) * car.rent.price;
+  const rentTotal = Number(dates.length) * car.price;
 
   async function handleSchedulingComplete() {
     setLoading(true);
@@ -89,7 +89,7 @@ export function SchedulingDetails() {
         <BackButton onPress={() => goBack()} />
       </S.Header>
 
-      <ImageSlider imagesUrl={car.photos} />
+      <ImageSlider imagesUrl={car.photos.map((item) => item.photo)} />
 
       <S.Content
         showsVerticalScrollIndicator={false}
@@ -105,8 +105,8 @@ export function SchedulingDetails() {
           </S.Description>
 
           <S.Rent>
-            <S.Period>{car.rent.period}</S.Period>
-            <S.Price>R$ {car.rent.price}</S.Price>
+            <S.Period>{car.period}</S.Period>
+            <S.Price>R$ {car.price}</S.Price>
           </S.Rent>
         </S.Details>
         <S.Accessories>
@@ -149,7 +149,7 @@ export function SchedulingDetails() {
           <S.RentalPriceLabel>TOTAL</S.RentalPriceLabel>
           <S.RentalPriceDetails>
             <S.RentalPriceQuota>
-              R$ {car.rent.price} x{dates.length} diárias
+              R$ {car.price} x{dates.length} diárias
             </S.RentalPriceQuota>
             <S.RentalPriceTotal>R$ {rentTotal}</S.RentalPriceTotal>
           </S.RentalPriceDetails>
