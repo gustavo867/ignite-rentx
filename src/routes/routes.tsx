@@ -6,6 +6,7 @@ import { Splash } from "../screens/Splash";
 import { useAuth } from "../hooks/auth";
 import { AuthRoutes } from "./auth.routes";
 import { AppRoutes } from "./app.routes";
+import { Success } from "../screens/Success";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -26,6 +27,15 @@ export function Routes() {
       ) : (
         <Screen name="Auth" component={AuthRoutes} />
       )}
+      <Screen
+        name="Success"
+        component={Success}
+        initialParams={{
+          title: "Successo",
+          subTitle: "",
+          nextScreen: "Home",
+        }}
+      />
     </Navigator>
   );
 }

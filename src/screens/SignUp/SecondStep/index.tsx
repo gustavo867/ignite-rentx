@@ -14,7 +14,7 @@ import * as S from "./styles";
 import { api } from "../../../services/api";
 
 interface RouteProps {
-  user: { name: string; email: string; diverLicense: string };
+  user: { name: string; email: string; driverLicense: string };
 }
 
 export function SecondStep() {
@@ -41,7 +41,7 @@ export function SecondStep() {
       .post("/users", {
         name: user.name,
         email: user.email,
-        driver_license: user.diverLicense,
+        driver_license: user.driverLicense,
         password: password,
       })
       .then((res) => {

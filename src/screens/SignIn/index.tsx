@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  Alert,
-  Keyboard,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { Alert, Keyboard } from "react-native";
 import * as Yup from "yup";
 import { useTheme } from "styled-components";
 

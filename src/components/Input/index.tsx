@@ -5,6 +5,7 @@ import { useTheme } from "styled-components";
 
 import * as S from "./styles";
 import { useState } from "react";
+import { useEffect } from "react";
 
 interface Props extends TextInputProps {
   iconName: React.ComponentProps<typeof Feather>["name"];
@@ -16,6 +17,12 @@ export function Input({ iconName, value, ...rest }: Props) {
   const [isFocused, setIsFocused] = useState(false);
 
   const theme = useTheme();
+
+  useEffect(() => {
+    if (value) {
+      setIsFilled(true);
+    }
+  }, []);
 
   function handleInputBlur() {
     setIsFocused(false);

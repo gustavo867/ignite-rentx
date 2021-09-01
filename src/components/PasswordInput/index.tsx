@@ -38,6 +38,8 @@ export function PasswordInput({ iconName, value, ...rest }: Props) {
         onFocus={() => setIsFocused(true)}
         onBlur={handleInputBlur}
         secureTextEntry={isPasswordVisible}
+        autoCapitalize="none"
+        autoCorrect={false}
         {...(rest as any)}
       />
       <S.ChangePasswordVisibilityButton

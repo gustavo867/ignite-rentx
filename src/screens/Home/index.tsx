@@ -19,18 +19,26 @@ export function Home() {
   const [data, setData] = useState<CarDTO[]>([]);
 
   useEffect(() => {
+    let mounted = true;
+
     async function fetchCars() {
       try {
         const response = await api.get("cars");
 
-        setData(response.data);
-        setLoading(false);
+        if (mounted) {
+          setData(response.data);
+          setLoading(false);
+        }
       } catch (e) {
         console.log("Error", e.request);
       }
     }
 
     fetchCars();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   useEffect(() => {

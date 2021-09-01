@@ -28,7 +28,7 @@ export function ImageSlider({ imagesUrl }: Props) {
       <S.Container>
         <S.ImageIndexes>
           {imagesUrl.map((_, index) => (
-            <S.ImageIndex active={index === currentIndex} />
+            <S.ImageIndex key={index} active={index === currentIndex} />
           ))}
         </S.ImageIndexes>
 

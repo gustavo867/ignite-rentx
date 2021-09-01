@@ -17,7 +17,7 @@ export function FirstStep({}: Props) {
   const [userData, setUserData] = useState({
     name: "",
     email: "",
-    diverLicense: "",
+    driverLicense: "",
   });
 
   const { goBack, navigate } = useNavigation();
@@ -28,7 +28,7 @@ export function FirstStep({}: Props) {
       email: Yup.string()
         .required("E-mail obrigatório")
         .email("E-mail inválido"),
-      diverLicense: Yup.string().required("O CNH é obrigatório"),
+      driverLicense: Yup.string().required("O CNH é obrigatório"),
     });
 
     try {
@@ -84,9 +84,9 @@ export function FirstStep({}: Props) {
             keyboardType="numeric"
             autoCorrect={false}
             autoCapitalize="none"
-            value={userData.diverLicense}
+            value={userData.driverLicense}
             onChangeText={(text) =>
-              setUserData((state) => ({ ...state, diverLicense: text }))
+              setUserData((state) => ({ ...state, driverLicense: text }))
             }
           />
         </S.Form>
@@ -94,7 +94,7 @@ export function FirstStep({}: Props) {
           title="Próximo"
           onPress={handleNextStep}
           enabled={Boolean(
-            !!userData.email && !!userData.diverLicense && !!userData.name
+            !!userData.email && !!userData.driverLicense && !!userData.name
           )}
         />
       </S.Container>
