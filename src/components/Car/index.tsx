@@ -4,10 +4,11 @@ import * as S from "./styles";
 
 import { CarDTO } from "../../dtos/CarDTO";
 import { getAccessoryIcon } from "../../utils/getAccessoryIcon";
+import { Car as CarModel } from "../../databases/models/car";
 
 type Props = {
-  data: CarDTO;
-  onPress(data: CarDTO): void;
+  data: CarModel;
+  onPress(data: CarModel): void;
 };
 
 export function Car({ data, onPress }: Props) {
@@ -22,7 +23,7 @@ export function Car({ data, onPress }: Props) {
         <S.About>
           <S.Rent>
             <S.Period>{data.period}</S.Period>
-            <S.Price>{`R$ ${data.price}`}</S.Price>
+            <S.Price>{`R$ ${!!data.price ? data.price : "..."}`}</S.Price>
           </S.Rent>
 
           <S.Type>

@@ -4,6 +4,7 @@ import Animated from "react-native-reanimated";
 import { RFValue } from "react-native-responsive-fontsize";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
+import { Car } from "../../databases/models/car";
 import { CarDTO } from "../../dtos/CarDTO";
 
 export const Container = styled.View`
@@ -29,7 +30,7 @@ export const TotalCars = styled.Text`
   color: ${({ theme }) => theme.colors.shape};
 `;
 
-export const CarList = styled(FlatList as new () => FlatList<CarDTO>).attrs({
+export const CarList = styled(FlatList as new () => FlatList<Car>).attrs({
   contentContainerStyle: {
     padding: 24,
   },

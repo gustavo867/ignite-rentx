@@ -18,6 +18,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "styled-components";
+import { Car } from "../../databases/models/car";
 
 type RouteProps = {
   data: CarDTO;
@@ -66,7 +67,13 @@ export function CarDetails() {
           </S.Header>
 
           <Animated.View style={slideCarsStyleAnimation}>
-            <ImageSlider imagesUrl={data.photos.map((item) => item.photo)} />
+            <ImageSlider
+              imagesUrl={
+                !!data.photos
+                  ? data.photos.map((item) => item.photo)
+                  : [data.thumbnail]
+              }
+            />
           </Animated.View>
         </SafeAreaView>
       </Animated.View>
@@ -89,22 +96,19 @@ export function CarDetails() {
 
           <S.Rent>
             <S.Period>{data.period}</S.Period>
-            <S.Price>R$ {data.price}</S.Price>
+            <S.Price>R$ {!!data.price ? data.price : "..."}</S.Price>
           </S.Rent>
         </S.Details>
         <S.Accessories>
-          {data.accessories.map((item, index) => (
-            <Accessory
-              key={`${item.name}-${index}`}
-              name={item.name}
-              icon={getAccessoryIcon(item.type)}
-            />
-          ))}
+          {!!data.accessories &&
+            data.accessories.map((item, index) => (
+              <Accessory
+                key={`${item.name}-${index}`}
+                name={item.name}
+                icon={getAccessoryIcon(item.type)}
+              />
+            ))}
         </S.Accessories>
-        <S.About>{data.about}</S.About>
-        <S.About>{data.about}</S.About>
-        <S.About>{data.about}</S.About>
-        <S.About>{data.about}</S.About>
         <S.About>{data.about}</S.About>
       </Animated.ScrollView>
 
