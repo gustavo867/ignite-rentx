@@ -1,7 +1,9 @@
 import React, { useCallback, useState } from "react";
+import { useMemo } from "react";
 import { useRef } from "react";
 import { ViewToken } from "react-native";
 import { FlatList } from "react-native";
+import FastImage from "react-native-fast-image";
 
 import * as S from "./styles";
 
@@ -17,6 +19,12 @@ interface ChangeImageProps {
 export function ImageSlider({ imagesUrl }: Props) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const images = useMemo(() => {
+    FastImage.preload(imagesUrl.map((item) => ({ uri: item })));
+
+    return imagesUrl;
+  }, [imagesUrl]);
+
   const indexChange = useRef((info: ChangeImageProps) => {
     const index = info.viewableItems[0].index;
 
@@ -27,13 +35,13 @@ export function ImageSlider({ imagesUrl }: Props) {
     <>
       <S.Container>
         <S.ImageIndexes>
-          {imagesUrl.map((_, index) => (
+          {images.map((_, index) => (
             <S.ImageIndex key={index} active={index === currentIndex} />
           ))}
         </S.ImageIndexes>
 
         <FlatList
-          data={imagesUrl}
+          data={images}
           keyExtractor={(key, index) => `${key}-${index}`}
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -42,7 +50,10 @@ export function ImageSlider({ imagesUrl }: Props) {
           onViewableItemsChanged={indexChange.current}
           renderItem={({ item }) => (
             <S.CarImageWrapper>
-              <S.CarImage source={{ uri: item }} resizeMode="contain" />
+              <S.CarImage
+                source={{ uri: item, priority: FastImage.priority.normal }}
+                resizeMode={FastImage.resizeMode.contain}
+              />
             </S.CarImageWrapper>
           )}
         />

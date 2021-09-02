@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { Alert, BackHandler } from "react-native";
+import { BackHandler } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 import { useNetInfo } from "@react-native-community/netinfo";
 import { synchronize } from "@nozbe/watermelondb/sync";
 import { database } from "../../databases";
-import { CarDTO } from "../../dtos/CarDTO";
 import { api } from "../../services/api";
 
 import { Car } from "../../components/Car";
@@ -15,6 +14,7 @@ import * as S from "./styles";
 
 import Logo from "../../assets/logo.svg";
 import { Car as CarModel } from "../../databases/models/car";
+import FastImage from "react-native-fast-image";
 
 export function Home() {
   const { navigate } = useNavigation();
@@ -54,10 +54,12 @@ export function Home() {
 
         if (mounted) {
           setData(cars);
+
+          FastImage.preload(cars.map((item) => ({ uri: item.thumbnail })));
           setLoading(false);
         }
       } catch (e) {
-        console.log("Error", e.request);
+        console.log("Erro", e);
       }
     }
 
@@ -69,7 +71,7 @@ export function Home() {
   }, []);
 
   useEffect(() => {
-    if (!netInfo.isConnected) {
+    if (!netInfo.isConnected === true) {
       // Alert.alert("Você está offline");
     } else {
       offlineSynchronize();

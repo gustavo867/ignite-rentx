@@ -16,9 +16,11 @@ import { format } from "date-fns";
 import { getPlatformDate } from "../../utils/getPlatformDate";
 import { api } from "../../services/api";
 import { Alert } from "react-native";
+import { Car as CarModel } from "../../databases/models/car";
+import { useNetInfo } from "@react-native-community/netinfo";
 
 type RouteProps = {
-  car: CarDTO;
+  car: CarModel;
   dates: string[];
 };
 
@@ -31,6 +33,8 @@ export function SchedulingDetails() {
   const [rentalPeriod, setRentalPeriod] = useState<RentalPeriod>(
     {} as RentalPeriod
   );
+  const netInfo = useNetInfo();
+  const [carUpdated, setCarUpdated] = useState<CarDTO>({} as CarDTO);
   const [loading, setLoading] = useState(false);
   const { navigate, goBack } = useNavigation();
   const { params } = useRoute();
@@ -40,38 +44,39 @@ export function SchedulingDetails() {
 
   async function handleSchedulingComplete() {
     setLoading(true);
-    const schedulesByCar = await api.get(`schedules_bycars/${car.id}`);
 
-    const unavailableDates = [
-      ...schedulesByCar.data.unavailable_dates,
-      ...dates,
-    ];
-
-    await api.post("schedules_byuser", {
-      user_id: 1,
-      car,
-      startDate: format(getPlatformDate(new Date(dates[0])), "dd/MM/yyyy"),
-      endDate: format(
-        getPlatformDate(new Date(dates[dates.length - 1])),
-        "dd/MM/yyyy"
-      ),
-    });
-
-    api
-      .put(`schedules_bycars/${car.id}`, {
-        id: car.id,
-        unavailable_dates: unavailableDates,
+    await api
+      .post("rentals", {
+        user_id: 1,
+        car_id: car.id,
+        start_date: new Date(dates[0]),
+        end_date: new Date(dates[dates.length - 1]),
+        total: rentTotal,
       })
       .then(() => {
         setLoading(false);
         navigate("SchedulingComplete");
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log("Error", error.request);
+
         setLoading(false);
 
         Alert.alert("Não foi possível confirmar o agendamento");
       });
   }
+
+  useEffect(() => {
+    async function fetchCarUpdate() {
+      const response = await api.get(`cars/${car.id}`);
+
+      setCarUpdated(response.data);
+    }
+
+    if (netInfo.isConnected === true) {
+      fetchCarUpdate();
+    }
+  }, [netInfo.isConnected]);
 
   useEffect(() => {
     setRentalPeriod({
@@ -89,7 +94,13 @@ export function SchedulingDetails() {
         <BackButton onPress={() => goBack()} />
       </S.Header>
 
-      <ImageSlider imagesUrl={car.photos.map((item) => item.photo)} />
+      <ImageSlider
+        imagesUrl={
+          carUpdated?.photos
+            ? carUpdated?.photos.map((item) => item.photo)
+            : [car.thumbnail]
+        }
+      />
 
       <S.Content
         showsVerticalScrollIndicator={false}
@@ -106,18 +117,22 @@ export function SchedulingDetails() {
 
           <S.Rent>
             <S.Period>{car.period}</S.Period>
-            <S.Price>R$ {car.price}</S.Price>
+            <S.Price>
+              R$ {netInfo.isConnected === true ? car.price : "..."}
+            </S.Price>
           </S.Rent>
         </S.Details>
-        <S.Accessories>
-          {car.accessories.map((item, index) => (
-            <Accessory
-              key={`${item.name}-${index}`}
-              name={item.name}
-              icon={getAccessoryIcon(item.type)}
-            />
-          ))}
-        </S.Accessories>
+        {carUpdated?.accessories && (
+          <S.Accessories>
+            {carUpdated.accessories.map((item, index) => (
+              <Accessory
+                key={`${item.name}-${index}`}
+                name={item.name}
+                icon={getAccessoryIcon(item.type)}
+              />
+            ))}
+          </S.Accessories>
+        )}
 
         <S.RentalPeriod>
           <S.CalendarIcon>
@@ -149,9 +164,12 @@ export function SchedulingDetails() {
           <S.RentalPriceLabel>TOTAL</S.RentalPriceLabel>
           <S.RentalPriceDetails>
             <S.RentalPriceQuota>
-              R$ {car.price} x{dates.length} diárias
+              R$ {netInfo.isConnected === true ? car.price : "..."} x
+              {dates.length} diárias
             </S.RentalPriceQuota>
-            <S.RentalPriceTotal>R$ {rentTotal}</S.RentalPriceTotal>
+            <S.RentalPriceTotal>
+              R$ {netInfo.isConnected === true ? rentTotal : "..."}
+            </S.RentalPriceTotal>
           </S.RentalPriceDetails>
         </S.RentalPrice>
       </S.Content>
@@ -161,9 +179,15 @@ export function SchedulingDetails() {
           title="Alugar agora"
           color={theme.colors.success}
           onPress={handleSchedulingComplete}
-          enabled={!loading}
+          enabled={netInfo.isConnected === true ? !loading : false}
           loading={loading}
         />
+
+        {netInfo.isConnected === false && (
+          <S.OfflineInfo>
+            Conecte-se a Internet para ver mais detalhes e agendar seu carro.
+          </S.OfflineInfo>
+        )}
       </S.Footer>
     </S.Container>
   );

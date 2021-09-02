@@ -2,9 +2,10 @@ import React from "react";
 
 import * as S from "./styles";
 
-import { CarDTO } from "../../dtos/CarDTO";
 import { getAccessoryIcon } from "../../utils/getAccessoryIcon";
 import { Car as CarModel } from "../../databases/models/car";
+import { useNetInfo } from "@react-native-community/netinfo";
+import FastImage from "react-native-fast-image";
 
 type Props = {
   data: CarModel;
@@ -12,6 +13,7 @@ type Props = {
 };
 
 export function Car({ data, onPress }: Props) {
+  const netInfo = useNetInfo();
   const MotorIcon = getAccessoryIcon(data.fuel_type);
 
   return (
@@ -23,7 +25,9 @@ export function Car({ data, onPress }: Props) {
         <S.About>
           <S.Rent>
             <S.Period>{data.period}</S.Period>
-            <S.Price>{`R$ ${!!data.price ? data.price : "..."}`}</S.Price>
+            <S.Price>{`R$ ${
+              netInfo.isConnected === true ? data.price : "..."
+            }`}</S.Price>
           </S.Rent>
 
           <S.Type>
@@ -35,9 +39,9 @@ export function Car({ data, onPress }: Props) {
       <S.CarImage
         source={{
           uri: data.thumbnail,
+          priority: FastImage.priority.normal,
         }}
-        resizeMethod="resize"
-        resizeMode="contain"
+        resizeMode={FastImage.resizeMode.contain}
       />
     </S.Container>
   );
